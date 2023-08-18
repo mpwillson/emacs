@@ -250,7 +250,7 @@ to continue it."
 (defun janet-strip-prompt (response)
   "Strip sub-prompts from reponse. Extract response payload and latest prompt
  to return as Janet output."
-  (let ((str (replace-regexp-in-string "repl:[0-9]+:[[(`\"]+> " "" response)))
+  (let ((str (replace-regexp-in-string "repl:[0-9]+:[[(`{\"]+> " "" response)))
     (let ((payload (replace-regexp-in-string "repl:[0-9]+:> " "" str))
            (prompts (janet-re-seq "\\(repl:[0-9]+:> \\)$" str)))
       (concat (replace-regexp-in-string "\n$" "" payload) "\n" (car prompts)))))
