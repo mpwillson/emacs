@@ -44,7 +44,7 @@
 ;;   1. clojure => janet
 ;;   2. Removed unsupported features (e.g. var doc, args doc)
 ;;   3. Filter comint output to remove Janet subprompts and prompts
-;;      related to comments or blank lines.
+;;      caused by comments or blank lines.
 ;;   4. Replace load-file by import*
 
 ;;; Code:
@@ -101,7 +101,6 @@ mode.  Default is whitespace followed by 0 or 1 single-letter colon-keyword
     (define-key map "\C-c\C-p" 'janet-eval-paragraph)
     (define-key map "\C-c\C-z" 'switch-to-janet)
     (define-key map "\C-c\C-l" 'janet-load-file)
-    (define-key map "\C-c\C-a" 'janet-show-arglist)
     (define-key map "\C-c\C-v" 'janet-show-documentation)
     map))
 
@@ -236,23 +235,25 @@ to continue it."
   "t if STR does not match `inf-janet-filter-regexp'."
   (not (string-match inf-janet-filter-regexp str)))
 
-
-(defun janet-last-prompt (re str i lastmatch)
-  (let ((start (string-match re str i)))
-  (if start
-      (if (= start i)
-          (janet-last-prompt re str (match-end 0)
-                             (match-string-no-properties 0 str))
-        lastmatch)
-    lastmatch)))
+(defun janet-re-seq (regexp string)
+  "Rwturn list of all regexp matches in a string"
+  (if (= (length string) 0)
+      '()
+    (save-match-data
+      (let ((pos 0)
+            matches)
+        (while (string-match regexp string pos)
+          (push (match-string 0 string) matches)
+          (setq pos (match-end 0)))
+        matches))))
 
 (defun janet-strip-prompt (response)
-  "Strip sub-prompts from reponse. Strip top-level prompts (except last), when
- they are not preceeded by code output."
+  "Strip sub-prompts from reponse. Extract response payload and latest prompt
+ to return as Janet output."
   (let ((str (replace-regexp-in-string "repl:[0-9]+:[[(`\"]+> " "" response)))
-    (if nil ;;(string-match-p "<[^>]*>" str)
-        str
-      (janet-last-prompt "\\(repl:[0-9]+:> \\)" str 0 str))))
+    (let ((payload (replace-regexp-in-string "repl:[0-9]+:> " "" str))
+           (prompts (janet-re-seq "\\(repl:[0-9]+:> \\)$" str)))
+      (concat (replace-regexp-in-string "\n$" "" payload) "\n" (car prompts)))))
 
 ;;;###autoload
 (defun inf-janet (cmd)
