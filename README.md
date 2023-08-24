@@ -9,7 +9,7 @@ replace-re by replacement-str, in lines matching filter-re.
 If you're installing manually, you'll need to drop the file somewhere
 on your load path (perhaps ~/.emacs.d)
 
-## inf-clojure.el
+## inf-janet.el
 
 Yet another inferior mode for Janet. Copied from inf-clojure.el (by
 Bozhidar Batsov) and lightly editted to work with Janet.
