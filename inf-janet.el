@@ -118,7 +118,7 @@ The following commands are available:
   :type 'string
   :group 'inf-janet)
 
-(defcustom inf-janet-load-command "(import* \"/%s\")\n"
+(defcustom inf-janet-load-command "(import* \"/%s\" :fresh true)\n"
   "Format-string for building a Janet expression to load a file.
 This format string should use `%s' to substitute a file name
 and should result in a Janet expression that will command the inferior Janet
