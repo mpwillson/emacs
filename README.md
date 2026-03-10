@@ -33,3 +33,13 @@ If you're installing manually, you'll need to:
 
         (autoload 'inf-janet "inf-janet" "Run an inferior Janet process" t)
         (add-hook 'janet-mode-hook 'inf-janet-minor-mode)
+
+## nord-theme.el
+
+This is a version of the nord custom theme for Emacs. It is based on
+the offical version at <https://github.com/nordtheme/emacs>, which now
+appears dormant. This version fixes a number of issues, discussed at
+<https://github.com/nordtheme/emacs/issues/59>.
+
+Place a copy of nord-theme.el in your custom-themes directory
+(e.g. `~/.emacs.d/custom-themes`).
